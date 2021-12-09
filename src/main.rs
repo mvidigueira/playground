@@ -30,7 +30,7 @@ async fn main() {
     for i in 1.. {
         if i % 1000 == 0 {
             let end = Instant::now();
-            println!("Throughput: {} BPS.", bytes as u128 / (end.duration_since(start).as_millis() / 1000));
+            println!("Throughput: {} BPS.", (bytes * 1_000_000u64)/ end.duration_since(start).as_micros() as u64);
             start = end;
         }
         let _message = session.receive::<Vec<u32>>().await.unwrap();
