@@ -22,20 +22,20 @@ async fn main() {
 
     let other = shard.into_iter().filter(|keycard| keycard.identity() != my_card.identity()).next().unwrap();
 
-    // let connector = SessionConnector::new(connector);
-
-    let mut connection = connector.connect(other.identity()).await.unwrap();
+    let connector = SessionConnector::new(connector);
 
     let bytes: u64 = 1_000_000;
     let message = (0..bytes as u32/4).collect::<Vec<u32>>();
 
     let mut start = Instant::now();
     for i in 1.. {
+        let mut session = connector.connect(other.identity()).await.unwrap();
         if i % 1000 == 0 {
             let end = Instant::now();
             println!("Throughput: {} BPS.", (bytes * 1_000_000u64)/ end.duration_since(start).as_micros() as u64);
             start = end;
         }
-        connection.send(&message).await.unwrap();
+        session.send(&message).await.unwrap();
+        session.end();
     }
 }
