@@ -36,6 +36,8 @@ async fn main() {
             start = end;
         }
         session.send(&message).await.unwrap();
+        let _message: Vec<u32> = session.receive().await.unwrap();
+
         session.end();
     }
 }
