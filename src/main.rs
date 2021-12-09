@@ -1,6 +1,7 @@
 use std::time::Instant;
 
 use talk::crypto::KeyChain;
+use talk::net::Connector;
 use talk::net::SessionConnector;
 use talk::link::rendezvous::Connector as RendezvousConnector;
 use talk::link::rendezvous::Client;
@@ -21,9 +22,9 @@ async fn main() {
 
     let other = shard.into_iter().filter(|keycard| keycard.identity() != my_card.identity()).next().unwrap();
 
-    let connector = SessionConnector::new(connector);
+    // let connector = SessionConnector::new(connector);
 
-    let mut session = connector.connect(other.identity()).await.unwrap();
+    let mut connection = connector.connect(other.identity()).await.unwrap();
 
     let bytes: u64 = 1_000_000;
     let message = (0..bytes as u32/4).collect::<Vec<u32>>();
@@ -35,6 +36,6 @@ async fn main() {
             println!("Throughput: {} BPS.", (bytes * 1_000_000u64)/ end.duration_since(start).as_micros() as u64);
             start = end;
         }
-        session.send(&message).await.unwrap();
+        connection.send(&message).await.unwrap();
     }
 }
