@@ -1,8 +1,6 @@
 use std::time::Instant;
 
 use talk::crypto::KeyChain;
-use talk::net::Listener;
-use talk::net::SessionConnector;
 use talk::link::rendezvous::Listener as RendezvousListener;
 use talk::link::rendezvous::Client;
 use talk::net::SessionListener;
@@ -21,19 +19,19 @@ async fn main() {
 
     client.publish_card(my_card.clone(), Some(0)).await.unwrap();
 
-    // let mut listener = SessionListener::new(listener);
-
-    let (_, mut connection) = listener.accept().await.unwrap();
+    let mut listener = SessionListener::new(listener);
 
     let bytes = 1_000_000;
 
     let mut start = Instant::now();
     for i in 1.. {
+        let (_, mut session) = listener.accept().await;
         if i % 1000 == 0 {
             let end = Instant::now();
             println!("Throughput: {} BPS.", (bytes * 1_000_000u64)/ end.duration_since(start).as_micros() as u64);
             start = end;
         }
-        let _message = connection.receive::<Vec<u32>>().await.unwrap();
+        let _message = session.receive::<Vec<u32>>().await.unwrap();
+        session.end();
     }
 }
