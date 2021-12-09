@@ -32,7 +32,7 @@ async fn main() {
         let mut session = connector.connect(other.identity()).await.unwrap();
         if i % 1000 == 0 {
             let end = Instant::now();
-            println!("Throughput: {} BPS.", (1_000 * bytes * 1_000_000u64)/ end.duration_since(start).as_micros() as u64);
+            println!("Throughput: {} BPS.", 2 * 1_000 * ((bytes * 1_000_000u64) / end.duration_since(start).as_micros() as u64));
             start = end;
         }
         session.send(&message).await.unwrap();
