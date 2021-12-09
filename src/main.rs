@@ -13,7 +13,7 @@ async fn main() {
 
     let server = "13.59.89.246:9000";
 
-    let mut listener = RendezvousListener::new(server, keychain, Default::default()).await;
+    let listener = RendezvousListener::new(server, keychain, Default::default()).await;
 
     let client = Client::new(server, Default::default());
 
