@@ -28,7 +28,7 @@ async fn main() {
         let (_, mut session) = listener.accept().await;
         if i % 1000 == 0 {
             let end = Instant::now();
-            println!("Throughput: {} BPS.", (bytes * 1_000_000u64)/ end.duration_since(start).as_micros() as u64);
+            println!("Throughput: {} BPS.", (1_000 * bytes * 1_000_000u64)/ end.duration_since(start).as_micros() as u64);
             start = end;
         }
         let message = session.receive::<Vec<u32>>().await.unwrap();
