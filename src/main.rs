@@ -25,18 +25,16 @@ async fn main() {
 
     let mut session = connector.connect(other.identity()).await.unwrap();
 
-    let bytes = 1_000_000;
-    let message = (0..bytes/4).collect::<Vec<u32>>();
+    let bytes: u64 = 1_000_000;
+    let message = (0..bytes as u32/4).collect::<Vec<u32>>();
 
     let mut start = Instant::now();
     for i in 1.. {
         if i % 1000 == 0 {
             let end = Instant::now();
-            println!("Throughput: {} BPS.", bytes as u128 / (end.duration_since(start).as_millis() / 1000));
+            println!("Throughput: {} BPS.", (bytes * 1_000_000u64)/ end.duration_since(start).as_micros() as u64);
             start = end;
         }
         session.send(&message).await.unwrap();
     }
-
-
 }
