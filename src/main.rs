@@ -12,7 +12,7 @@ async fn main() {
     let keychain = KeyChain::random();
     let my_card = keychain.keycard();
 
-    let server = "3.15.200.1:9000";
+    let server = "13.59.89.246:9000";
 
     let connector = RendezvousConnector::new(server, keychain, Default::default());
 
