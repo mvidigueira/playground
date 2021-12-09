@@ -17,7 +17,6 @@ async fn main() {
 
     let client = Client::new(server, Default::default());
 
-    client.publish_card(my_card.clone(), Some(0)).await.unwrap();
     let shard = client.get_shard(0).await.unwrap();
 
     let other = shard.into_iter().filter(|keycard| keycard.identity() != my_card.identity()).next().unwrap();
